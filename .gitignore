@@ -1,0 +1,13 @@
+/target/
+/.venv/
+/.initial-python/
+*.egg-info/
+__pycache__/
+.env
+/state/
+/output/
+/dist/
+/AppDir/
+*.AppImage
+/config.json
+/fiche-revision.pdf

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Révisions
+Comment=Documents, fiches et rappel actif
+Exec=study-ui
+Icon=revisions
+Categories=Education;
+Terminal=false

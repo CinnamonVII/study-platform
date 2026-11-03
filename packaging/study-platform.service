@@ -1,0 +1,19 @@
+[Unit]
+Description=Private revision platform
+After=network-online.target
+[Service]
+User=study
+Group=study
+WorkingDirectory=/opt/study-platform
+EnvironmentFile=/etc/study-platform/secrets.env
+ExecStart=/opt/study-platform/study-server
+Restart=on-failure
+StateDirectory=study-platform
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/study-platform
+[Install]
+WantedBy=multi-user.target

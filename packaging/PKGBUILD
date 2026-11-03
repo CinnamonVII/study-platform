@@ -1,0 +1,18 @@
+pkgname=study-platform
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Private revision platform with native Rust client'
+arch=('x86_64')
+url='https://github.com/CinnamonVII/study-platform'
+license=('MIT')
+depends=('gcc-libs' 'libxkbcommon' 'libx11' 'wayland' 'mesa')
+makedepends=('rust' 'cargo' 'git')
+source=("study-platform::git+https://github.com/CinnamonVII/study-platform.git#tag=v${pkgver}")
+sha256sums=('SKIP')
+build(){ cd "$srcdir/study-platform"; cargo build --locked --release -p study-ui -p study-engine -p study-server; }
+package(){
+ cd "$srcdir/study-platform"
+ for bin in study-ui study-engine study-server; do install -Dm755 "target/release/$bin" "$pkgdir/usr/bin/$bin"; done
+ install -Dm644 packaging/revisions.desktop "$pkgdir/usr/share/applications/revisions.desktop"
+ install -Dm644 packaging/revisions.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/revisions.svg"
+}

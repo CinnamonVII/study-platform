@@ -1,0 +1,17 @@
+[package]
+name = "study-server"
+version.workspace = true
+edition.workspace = true
+[dependencies]
+study-domain.workspace = true
+study-engine.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+tokio.workspace = true
+chrono.workspace = true
+axum = "0.8"
+tower-http = { version = "0.6", features = ["cors", "limit"] }
+subtle = "2"
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }

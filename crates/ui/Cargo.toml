@@ -1,0 +1,20 @@
+[package]
+name = "study-ui"
+version.workspace = true
+edition.workspace = true
+[dependencies]
+study-domain.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+eframe = { version = "0.33", default-features = false, features = ["default_fonts", "glow", "wayland", "x11", "accesskit"] }
+ehttp = { version = "0.5", features = ["json"] }
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+wasm-bindgen-futures = "0.4"
+web-sys = { version = "0.3", features = ["Window", "Document", "HtmlCanvasElement", "HtmlAnchorElement", "Blob", "BlobPropertyBag", "Url"] }
+[build-dependencies]
+serde_json = "1"
+[features]
+screenshot = ["eframe/__screenshot"]

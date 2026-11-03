@@ -1,0 +1,485 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Snapshot",
+  "type": "object",
+  "properties": {
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Document"
+      }
+    },
+    "fiches": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Fiche"
+      }
+    },
+    "progress": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Progress"
+      }
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Question"
+      }
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Run"
+      }
+    },
+    "schema_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "documents",
+    "fiches",
+    "questions",
+    "runs",
+    "progress"
+  ],
+  "$defs": {
+    "Citation": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string"
+        },
+        "page": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "quote": {
+          "type": "string"
+        },
+        "region": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxItems": 4,
+          "minItems": 4
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "document_id",
+        "page",
+        "quote"
+      ]
+    },
+    "DocType": {
+      "type": "string",
+      "enum": [
+        "cours",
+        "devoir",
+        "exercice",
+        "correction",
+        "fiche",
+        "methode",
+        "annale"
+      ]
+    },
+    "Document": {
+      "type": "object",
+      "properties": {
+        "chapter": {
+          "type": "string"
+        },
+        "content_hash": {
+          "type": "string"
+        },
+        "deleted": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/DocType"
+        },
+        "level": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0
+        },
+        "modified_at": {
+          "type": "string"
+        },
+        "original": {
+          "type": "string"
+        },
+        "private": {
+          "type": "boolean"
+        },
+        "provenance_reason": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Citation"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "transcription": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Transcription"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "uncertainties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "provenance_reason",
+        "subject",
+        "chapter",
+        "modified_at",
+        "content_hash",
+        "status",
+        "sources",
+        "text",
+        "original",
+        "private",
+        "deleted",
+        "uncertainties"
+      ]
+    },
+    "Fiche": {
+      "type": "object",
+      "properties": {
+        "chapter": {
+          "type": "string"
+        },
+        "essentials": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0
+        },
+        "notion_url": {
+          "type": "string"
+        },
+        "recall": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Section"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Citation"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "subject",
+        "chapter",
+        "level",
+        "sections",
+        "essentials",
+        "recall",
+        "sources",
+        "status",
+        "notion_url"
+      ]
+    },
+    "Progress": {
+      "type": "object",
+      "properties": {
+        "due": {
+          "type": "string"
+        },
+        "ease": {
+          "type": "number",
+          "format": "double"
+        },
+        "interval": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "question_id": {
+          "type": "string"
+        },
+        "repetitions": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "question_id",
+        "repetitions",
+        "ease",
+        "interval",
+        "due"
+      ]
+    },
+    "Question": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "string"
+        },
+        "chapter": {
+          "type": "string"
+        },
+        "choices": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cognitive": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "difficulty": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "fiche_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "generator_version": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/QuestionType"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "rubric": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Citation"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject",
+        "chapter",
+        "kind",
+        "cognitive",
+        "prompt",
+        "answer",
+        "explanation",
+        "choices",
+        "rubric",
+        "difficulty",
+        "sources",
+        "status",
+        "created_at",
+        "updated_at",
+        "generator_version",
+        "fiche_ids"
+      ]
+    },
+    "QuestionType": {
+      "type": "string",
+      "enum": [
+        "short",
+        "mcq",
+        "open",
+        "math",
+        "method",
+        "flashcard"
+      ]
+    },
+    "Run": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "started": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "started",
+        "status",
+        "detail"
+      ]
+    },
+    "Section": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/SectionKind"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "kind",
+        "lines"
+      ]
+    },
+    "SectionKind": {
+      "type": "string",
+      "enum": [
+        "definition",
+        "explanation",
+        "method",
+        "comparison",
+        "timeline",
+        "mechanism",
+        "alert"
+      ]
+    },
+    "Status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected",
+        "stale"
+      ]
+    },
+    "Transcription": {
+      "type": "object",
+      "properties": {
+        "citations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Citation"
+          }
+        },
+        "text": {
+          "type": "string"
+        },
+        "uncertainties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "uncertainties",
+        "citations"
+      ]
+    }
+  }
+}

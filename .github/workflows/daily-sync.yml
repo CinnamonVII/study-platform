@@ -1,0 +1,43 @@
+name: Daily private revision sync
+on:
+  schedule:
+    - cron: '0 7 * * *'
+      timezone: 'Europe/Paris'
+    - cron: '30 7 * * *'
+      timezone: 'Europe/Paris'
+  workflow_dispatch:
+concurrency:
+  group: study-private-sync
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  sync:
+    # Same persistent host and STUDY_STATE as the API. Never use an ephemeral
+    # runner with a fresh state, nor run public pull requests on this runner.
+    runs-on: [self-hosted, linux, study-private]
+    environment: study-private
+    timeout-minutes: 45
+    env:
+      STUDY_STATE: ${{ vars.STUDY_STATE }}
+      STUDY_CONFIG_JSON: ${{ secrets.STUDY_CONFIG_JSON }}
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+      GITHUB_TOKEN: ${{ secrets.STUDY_CONTENT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require durable configuration
+        shell: bash
+        run: |
+          test -n "$STUDY_STATE"
+          test -n "$OPENAI_MODEL"
+          test -n "$STUDY_CONFIG_JSON"
+          test -d "$STUDY_STATE"
+          umask 077
+          printf '%s' "$STUDY_CONFIG_JSON" > "$RUNNER_TEMP/study-config.json"
+      - name: Run the shared Rust pipeline
+        run: cargo run --locked --release -p study-engine -- daily "$RUNNER_TEMP/study-config.json"
+      - name: Daily result
+        if: always()
+        run: echo 'Consulter le journal privé dans l’application. Aucune note scolaire n’est jointe aux artifacts.' >> "$GITHUB_STEP_SUMMARY"
