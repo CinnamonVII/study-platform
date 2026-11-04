@@ -1,4 +1,6 @@
-# Architecture Python / Qt / React, schéma 2.0
+# Architecture de la variante Python / Qt / React, schéma 2.0
+
+La plateforme principale reste **full stack Rust**, conformément au [cahier des charges de référence](CAHIER_DES_CHARGES.md). Ce document décrit uniquement la variante conservée dans la PR nº 1 ; il ne définit pas la cible technique des futurs travaux.
 
 ## Composants
 

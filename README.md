@@ -1,8 +1,21 @@
 # Révisions · première
 
-Plateforme privée de révision pour mathématiques, SES, HGGSP et français : application **Linux native PySide6/Qt**, application **React/TypeScript/Vite/PWA**, moteur documentaire Python/Pydantic et API privée FastAPI. Les sources Notion restent privées. GitHub Pages publie uniquement l’interface et une démonstration fictive.
+**Architecture de référence : full stack Rust.** L’application Linux, le client web WebAssembly, le backend privé et le moteur documentaire poursuivent le workspace `crates/`. Voir le [cahier des charges de référence](docs/CAHIER_DES_CHARGES.md), confirmé le 4 novembre 2026.
 
-Cette branche ajoute la pile Python/Qt/React demandée. L’ancienne implémentation Rust est conservée dans `crates/` pour référence ; les commandes et workflows ci-dessous concernent la nouvelle pile. Aucun secret de connexion ChatGPT n’est automatiquement réutilisé par l’application.
+La variante Python/PySide6 + React/TypeScript développée dans la PR nº 1 est conservée avec ses tests et son AppImage. Elle reste une variante ; elle ne remplace pas la cible Rust. Les commandes et workflows Python/React présentés ci-dessous concernent cette variante. Les workflows de cette branche restent à isoler ou à réaligner avant de modifier le déploiement principal Rust.
+
+Les sources Notion restent privées. GitHub Pages publie uniquement l’interface statique et une démonstration fictive. Aucun secret de connexion ChatGPT n’est automatiquement réutilisé par l’application.
+
+## Plateforme principale Rust
+
+- `crates/domain` : contrats et pédagogie partagés, Serde/Schemars et répétition espacée.
+- `crates/engine` : moteur documentaire, connecteurs et exports.
+- `crates/server` : API privée Axum.
+- `crates/ui` : interface egui/eframe commune Linux et WebAssembly.
+
+La suite du développement doit améliorer ces composants en priorité. Le [plan Rust existant](docs/superpowers/plans/2026-11-03-platform.md) reste disponible. La documentation détaillée Python/Qt/React de cette branche décrit la variante conservée.
+
+## Variante Python/Qt + React conservée
 
 ## Essayer sur CachyOS
 
