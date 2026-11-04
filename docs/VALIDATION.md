@@ -5,7 +5,7 @@ Date : 4 novembre 2026. Les résultats concernent cette branche, pas un déploie
 ## Résultats obtenus
 
 - Python 3.12.14 ; PySide6 6.12.0 ; Pydantic 2.14.1 ; OpenAI SDK 2.54.0 ; FastAPI 0.162.0 ; Vite 8.3.5. Versions npm exactes dans package-lock.json, versions Python observées dans requirements-tested.txt.
-- `python -m pytest -q` : **39 tests passés**, y compris reprise de publication Notion et préservation de ses modifications manuelles.
+- `python -m pytest -q` : **40 tests passés**, y compris import/suppression GitHub, reprise de publication Notion et préservation des modifications manuelles.
 - `npm run test --prefix apps/web` : **6 tests passés**, dont parcours interactif réponse/correction/progression et absence de connexion privée simulée.
 - `npm run build --prefix apps/web` : compilation TypeScript et bundle Vite réussis, service worker statique généré.
 - `python scripts/check-public.py` : frontière publique vérifiée, uniquement fixture fictive et aucun chemin de contenu privé dans les assets.
@@ -35,6 +35,10 @@ Les connecteurs Notion/GitHub sont testés avec des transports simulés. Aucune 
 | Exécutions concurrentes | test_collision_no_partial_mutation |
 | Écriture externe échouée | test_failed_publication_retried_without_regeneration, test_notion_failed_write_not_checkpointed |
 | Même banque Linux/web | test_desktop_and_web_share_identical_questions, data.test.ts |
+
+CI GitHub également réussie : https://github.com/CinnamonVII/study-platform/actions/runs/41812467336 (commit 6fb670c12c286b4dee3062a78499108cb3f8dcab).
+
+AppImage livrée : SHA-256 `e74e4393b13db50a55a0d1c5dd865a472cc9116529e23f7b54dad8a065a263c4`.
 
 ## À vérifier avec de vrais accès
 
