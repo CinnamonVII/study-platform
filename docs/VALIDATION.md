@@ -1,43 +1,55 @@
-# Validation et état de livraison
+# Vérifications de la pile Python/Qt/React
 
-Vérifications exécutées sur cette machine le 3 novembre 2026, avec Rust 1.99.1, eframe 0.33.3, Axum 0.8.9, Typst 0.15.1 et Trunk 0.22.1. Les versions transitives sont figées dans Cargo.lock.
+Date : 4 novembre 2026. Les résultats concernent cette branche, pas un déploiement de production.
 
-## Tests automatisés
+## Résultats obtenus
 
-| Groupe | Résultat | Périmètre |
-| --- | --- | --- |
-| Domaine | 3 tests réussis | SM-2, note invalide, protection de la provenance générée |
-| Pipeline | 21 tests réussis | Import manuscrit simulé, modifications, devoirs, fiche et questions, réemploi d’une fiche validée, doublons, absence de changement, reprise, formule incertaine, éditions manuelles, concurrence, retrait, classification, citations, historique |
-| Connecteurs | 6 tests réussis | Refus du dépôt public, panne GitHub, écriture Notion ambiguë, suppression de pièces jointes après succès ou interruption, archive Notion immuable |
-| API | 5 tests réussis | Accès privé, no-store, CORS, contrat commun Linux/web, refus de progression sur question non validée |
+- Python 3.12.14 ; PySide6 6.12.0 ; Pydantic 2.14.1 ; OpenAI SDK 2.54.0 ; FastAPI 0.162.0 ; Vite 8.3.5. Versions npm exactes dans package-lock.json, versions Python observées dans requirements-tested.txt.
+- `python -m pytest -q` : **40 tests passés**, y compris import/suppression GitHub, reprise de publication Notion et préservation des modifications manuelles.
+- `npm run test --prefix apps/web` : **6 tests passés**, dont parcours interactif réponse/correction/progression et absence de connexion privée simulée.
+- `npm run build --prefix apps/web` : compilation TypeScript et bundle Vite réussis, service worker statique généré.
+- `python scripts/check-public.py` : frontière publique vérifiée, uniquement fixture fictive et aucun chemin de contenu privé dans les assets.
+- Application Qt lancée avec plateforme offscreen : cinq vues rendues et parcours question/correction testé.
+- Chaîne fictive de première : quatre sources, quatre fiches et douze questions, références et IDs communs aux clients.
+- AppImage x86_64 construite (environ 95 MiB), démarrée hors écran pendant 8 secondes sans erreur Python, puis arrêtée par timeout contrôlé.
+- Quatre PDF A4 générés ; texte sélectionnable extrait avec PyMuPDF. Rendu SES inspecté visuellement : couleurs, quadrillage, flèches, blocs et références lisibles.
 
-Total : 35 tests, exécutés par groupes ciblés. Le scénario de bout en bout utilise quatre documents fictifs représentatifs des matières de première, un générateur extractif de test, le stockage et les exports. Les tests de reconnaissance manuscrite simulent la réponse du modèle ; ils ne mesurent pas sa précision réelle.
+Les connecteurs Notion/GitHub sont testés avec des transports simulés. Aucune clé API de modèle ou intégration REST personnelle n’a été utilisée pour transcrire un vrai devoir. Le générateur de fixtures est explicitement extractif.
 
-La revue indépendante a conduit à ajouter des régressions pour les pannes au début d’un lot, les anciennes citations, la conservation des classifications et l’inventaire d’un premier passage interrompu. Les contenus de toutes les sources changées sont retirés de l’entraînement avant le premier appel de modèle.
+## Matrice des scénarios
 
-## Compilations et exécutions locales
+| Scénario | Preuve automatisée |
+| --- | --- |
+| Manuscrit original, archivage | test_handwritten_level_one_preserves_original |
+| Source modifiée, ID stable | test_modify_source_regenerates_stable_fiche |
+| Devoir nouveau | test_homework_generates_without_unjustified_level_one |
+| Fiche et questions, quatre matières | test_end_to_end_four_subjects_schema_exports |
+| Réutilisation d’une fiche validée | test_validated_level_two_reused_with_originals |
+| Réinjection sans boucle | test_accepting_generated_fiche_reinjects_once_without_loop |
+| Doublons | test_semantic_duplicate_filter |
+| Aucun changement | test_no_change_no_duplicate_no_regeneration |
+| Interruption/reprise | test_resume_after_interruption |
+| Mauvaise formule reconnue | test_formula_uncertainty_blocks_questions |
+| Corrections manuelles | test_manual_question_preserved_proposal_created, test_manual_transcription_preserved |
+| Aucune donnée privée publique | test_public_github_repository_rejected_before_any_write, test_private_fixture_cannot_enter_public_build |
+| Exécutions concurrentes | test_collision_no_partial_mutation |
+| Écriture externe échouée | test_failed_publication_retried_without_regeneration, test_notion_failed_write_not_checkpointed |
+| Même banque Linux/web | test_desktop_and_web_share_identical_questions, data.test.ts |
 
-- Compilation native Linux et cible wasm32-unknown-unknown réussies ; construction Trunk sous `/study-platform/` et vérification des assets statiques.
-- Application graphique native démarrée dans la session KDE et rendu observé. AppImage construite avec linuxdeploy, lancée avec extraction intégrée et restée active jusqu’à l’arrêt prévu du test, sans erreur fatale dans son journal. Pas d’essai sur un autre ordinateur CachyOS.
-- Site exécuté dans Chromium local : chargement WASM sans erreur JavaScript, captures 1160×820 et 375×812, navigation et correction visibles. Les débordements constatés sur le premier rendu mobile ont été corrigés.
-- Connexion réelle de l’interface au backend local authentifié : HTTP 200, quatre documents et quatre questions fictifs, sans erreur JavaScript. La correction d’une question est affichée après action dans l’interface connectée. Ce test n’utilise aucune donnée scolaire réelle.
-- Quatre PDF A4 d’une page produits avec Typst, texte extrait avec Poppler et chaque page rendue et inspectée. Exports Markdown, LaTeX et Typst présents. Le contrôle n’atteste pas la qualité d’une future génération IA sur de vrais manuscrits.
-- Recherche du jeton d’essai dans les assets Pages : aucune occurrence. Le script de préparation retire uniquement le verrou temporaire Trunk puis refuse les formats non statiques, les PDF et bases SQLite.
+CI GitHub également réussie : https://github.com/CinnamonVII/study-platform/actions/runs/41812467336 (commit 6fb670c12c286b4dee3062a78499108cb3f8dcab).
 
-## Non validé en production
+AppImage livrée : SHA-256 `e74e4393b13db50a55a0d1c5dd865a472cc9116529e23f7b54dad8a065a263c4`.
 
-Aucun appel payant au modèle ni synchronisation REST sur les documents réels n’a été exécuté. Les pages d’organisation Notion ont été consultées avec la connexion interactive, qui n’est pas un token du moteur autonome. Les connecteurs d’écriture ont été testés avec des serveurs simulés. Aucun dépôt distant n’a été créé, aucun commit poussé, aucune PR réelle ouverte, aucun site public déployé et aucune tâche ChatGPT de 7 h confirmée.
+## À vérifier avec de vrais accès
 
-Les workflows sont prêts à être configurés, mais n’ont pas de résultat GitHub Actions réel dans cette session. L’AppImage locale n’est pas une publication AUR ni une preuve de portabilité sur toutes les versions de glibc.
+- Création/mise à jour dans la vraie destination Notion et téléchargement d’une pièce jointe du workspace.
+- Modèle multimodal sélectionné, qualité réelle des formules manuscrites, coûts et limites API.
+- Authentification HTTPS et reverse proxy sur l’hôte personnel.
+- Runner privé durable et exécution réellement planifiée ; création confirmée de la tâche ChatGPT.
+- Déploiement GitHub Pages après fusion de la PR ; aucune nouvelle URL n’est présumée déployée.
+- Paquet Arch sur CachyOS, thème Breeze/Wayland et lancement AppImage sur la machine cible.
+- Inspection visuelle web dans un vrai navigateur : l’accès au serveur de prévisualisation local n’a pas abouti dans cet environnement, malgré la compilation et les tests DOM réussis.
 
-## Fonctionnalités restant à étendre
+## Fonctions qui restent limitées
 
-- Audit complet clavier/lecteur d’écran du canvas web ; aucune conformité WCAG globale revendiquée.
-- Rendu mathématique LaTeX avancé dans le lecteur et annotations graphiques des régions ; les étapes et régions sont conservées sous forme structurée.
-- Import local via CLI ; pas de téléversement/glisser-déposer dans le navigateur.
-- Dédoublonnage sémantique par embeddings ; la version actuelle utilise une similarité lexicale explicite.
-- Gestion multiutilisateur, progression privée hors ligne et verrou distribué entre hôtes.
-- Historique conservé dans SQLite mais sans écran de restauration détaillé. Les propositions se prévisualisent, s’appliquent ou s’écartent ; une PR non fusionnée s’annule depuis GitHub. Pas de suppression automatique d’une page source Notion.
-- Actualisation en place d’une ancienne page Notion remplacée par des versions additives, afin de préserver les sources et pièces jointes.
-
-Les actions humaines restantes sont détaillées dans DEPLOYMENT.md, NOTION_SETUP.md et CHATGPT_SCHEDULED_TASK.md.
+La déduplication utilise une similarité lexicale, pas des embeddings. L’éditeur est un éditeur JSON avancé, pas encore un formulaire riche par notion. L’authentification est monoutilisateur par jeton ; OAuth et comptes multiples ne sont pas implémentés. Les formules complexes restent en notation textuelle dans Qt/PDF ; le web rend `$...$` via KaTeX. Le mapping de propriétés Notion personnalisées n’est pas encore implémenté. La suppression d’une publication GitHub déjà fusionnée et la publication publique volontaire de contenus scolaires ne sont pas automatisées.

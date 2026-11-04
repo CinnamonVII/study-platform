@@ -11,3 +11,10 @@ __pycache__/
 *.AppImage
 /config.json
 /fiche-revision.pdf
+node_modules/
+apps/web/dist/
+.pytest_cache/
+*.spec
+/private/
+/build/
+engine/export/fonts/*.ttf

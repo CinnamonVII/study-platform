@@ -1,27 +1,50 @@
-# Architecture
+# Architecture de la variante Python / Qt / React, schéma 2.0
 
-La demande initiale Python/React a été remplacée par une architecture Rust à la demande de l’utilisateur. Quatre crates évitent la duplication entre interfaces. Serde refuse les champs inconnus des contenus pédagogiques ; Schemars exporte le contrat 1.0. SQLite conserve l’état privé. Axum expose une API JSON authentifiée à egui natif et à egui compilé en WebAssembly. Typst, lui aussi développé en Rust, produit les PDF sélectionnables à partir d’une source `.typ` échappée.
+La plateforme principale reste **full stack Rust**, conformément au [cahier des charges de référence](CAHIER_DES_CHARGES.md). Ce document décrit uniquement la variante conservée dans la PR nº 1 ; il ne définit pas la cible technique des futurs travaux.
 
-## Flux
+## Composants
 
-Source explicitement autorisée → copie immuable et empreinte → transcription multimodale avec incertitudes → fiche de niveau 2 et questions en attente → correction humaine → validation → proposition GitHub privée et version Notion additive.
+- `apps/desktop` : widgets Qt natifs PySide6 ; requêtes réseau dans QThreadPool.
+- `apps/web` : React 19, TypeScript, Vite, KaTeX, PWA statique. Validation JSON Schema via Ajv 2020.
+- `backend/api` : FastAPI, authentification réelle par jeton personnel du propriétaire, autorisations et validations côté serveur.
+- `engine` : ingestion, appels multimodaux Responses API, génération structurée Pydantic, classification, règles, export, synchronisation.
+- `schemas/snapshot-v2.json` : schéma généré depuis `engine/models.py`. `scripts/web-schema.mjs` génère les types TS. Les deux applications lisent le même JSON.
+- `fixtures/demo/snapshot-v2.json` : seules données embarquées dans les clients publics, entièrement fictives.
 
-L’ID d’une source locale dépend de son chemin canonique ; les révisions de ses octets sont archivées sous leur empreinte. Déplacer un fichier nécessite de conserver son identifiant avec l’API moteur, sinon l’import représente un nouveau document. Les pages et pièces jointes Notion utilisent leurs IDs stables. Le type documentaire et le niveau de provenance sont indépendants. Aucun classement automatique en niveau 1.
+Le backend Python est choisi plutôt qu’un Worker pour partager directement le moteur, les PDF, les fichiers immuables et le verrou. Aucun ensemble de microservices ni base cloud supplémentaire n’est nécessaire. Il peut être placé derrière un reverse proxy HTTPS ou un tunnel authentifié, sans exposer son port d’origine.
 
-Les sources textuelles Notion sont archivées en JSON par empreinte dans `originals/`. Les pièces jointes sont téléchargées sans remplacer les originaux. Les pages enfants ne sont pas parcourues implicitement : chaque page doit être autorisée et classée dans la configuration. Le connecteur parcourt les blocs imbriqués et la pagination. Une lecture incomplète échoue ; elle n’est jamais interprétée comme une suppression. L’inventaire d’une lecture complète permet de retirer les sources et pièces jointes disparues.
+## Données et provenance
 
-## Fiabilité
+Le type documentaire est indépendant du niveau. `level=null` signifie non attribué ; le niveau 1 requiert `provenance_reason`. `derived=true` impose le niveau 2 et au moins une source. L’original binaire est archivé sous son SHA-256, distinct de sa transcription modifiable. Les versions précédentes restent disponibles sur le serveur.
 
-Le verrou de fichier du noyau couvre lecture Notion et traitement sur un même hôte. Un processus vivant conserve son verrou ; un crash le libère. Les checkpoints sont enregistrés après transaction des résultats, par document. Les nouvelles sources sont enregistrées et les anciennes sorties invalidées avant les appels IA : une panne ne laisse pas une ancienne correction considérée comme actuelle. Une relance reprend les documents inachevés sans fenêtre arbitraire de 24 h.
+Un document Notion est importé seulement s’il figure dans l’allowlist. Ses blocs imbriqués sont lus avec pagination ; les pages enfants exigent leur propre entrée. Les pièces jointes prises en charge sont archivées et deviennent des documents séparés. PNG/JPEG/PDF sont soumis directement au modèle ; DOCX, TXT et Markdown sont extraits localement. URL signée et texte original restent privés.
 
-Les corrections et classifications manuelles sont protégées. Les propositions entrantes restent dans `candidate-*`. Leur application conserve l’ancienne version dans `history-*` et exige une nouvelle validation. Les versions obsolètes restent consultables pour audit, mais quittent l’entraînement. Une fiche validée de niveau 2 doit être vérifiée dans ses originaux acceptés de niveau 1 ; le moteur transmet également ces textes au générateur. Les sorties du moteur ne sont pas automatiquement redécouvertes comme de nouvelles sources, ce qui évite les boucles.
+## Cycle
 
-Notion : nouvelles pages versionnées uniquement sous des destinations existantes, jamais de suppression de blocs ou pièces jointes. Un marqueur déterministe retrouve une écriture déjà réussie. Une tentative ambiguë reste bloquée tant que la présence de la page n’est pas confirmée. GitHub : instantané dans une branche déterministe et PR brouillon ; aucun écrasement de branche et aucune fusion automatique. Le dépôt de contenu doit être privé.
+1. Lecture complète de l’inventaire autorisé, sans fenêtre arbitraire de 24 h.
+2. Empreinte des blocs et des fichiers ; différences de contenu, classification et suppressions explicites.
+3. Acquisition du verrou `flock`, import et checkpoint atomique avec `fsync` puis `replace`.
+4. Transcription structurée ; tout passage incertain reste bloqué pour la génération.
+5. Regroupement par matière et chapitre ; ID de fiche stable, empreinte des dépendances et version du générateur.
+6. Génération de fiche/questions en attente. Vérification des références et extraits. Déduplication lexicale normalisée et similarité de chaînes ; ce n’est pas un moteur d’embeddings sémantiques complet.
+7. Réinjection des fiches acceptées comme documents dérivés de niveau 2. Leur empreinte exclut les dates de publication ; les originaux restent dans le contexte.
+8. Publication uniquement des contenus validés dont les sources sont validées, actuelles et sans incertitude.
+9. Rapport privé ; `last_success` avance seulement après absence d’erreur. Les jobs terminés ne sont pas rejoués.
+
+Une erreur pendant la découverte interrompt le scan : un 403/404 ne constitue jamais une preuve de suppression. Seuls l’archivage explicite et l’absence dans un inventaire complet réussi autorisent un tombstone local. Les originaux archivés ne sont jamais supprimés.
+
+## Reprise et corrections humaines
+
+Chaque étape de génération est un job indexé par empreinte. Les transcriptions sont checkpointées avant la génération. Une publication échouée reste rejouable sans régénérer. Notion retrouve une page créée avant un crash grâce à son titre stable, puis réconcilie les blocs gérés. Une modification manuelle détectée devient une proposition et n’est pas écrasée. Les mises à jour plus courtes demandent de revoir les blocs en trop.
+
+Dans l’état local, les corrections humaines ont `manual=true`. Un changement de source conserve la transcription manuelle et ouvre une incertitude. Les fiches et questions corrigées restent en place ; les nouvelles versions deviennent des propositions. Des sorties affectées sont marquées `stale` et retirées de l’entraînement jusqu’à revalidation.
+
+Le connecteur GitHub exige un dépôt de données privé, construit des blobs et un arbre, puis un commit atomique et une branche déterministe. Il ouvre une PR brouillon ; il ne fusionne pas automatiquement. Les branches modifiées humainement sont conservées et signalées. Aucun document original binaire n’est ajouté au dépôt.
 
 ## Répétition espacée
 
-SM-2 : facilité initiale 2,5 ; première réussite à 1 jour, deuxième à 6 jours, suivantes multipliées par la facilité. Une note inférieure à 3 reprend à 1 jour ; facilité minimale 1,3. Les notes 0 à 5 sont une autoévaluation après affichage de la correction ; l’application ne prétend pas noter automatiquement une dissertation ou une preuve. La progression privée est partagée par l’API. En démonstration elle reste temporaire.
+SM-2, notes 0 à 5. Échec sous 3 : remise à 1 jour et zéro répétition. Réussites : 1 jour, 6 jours, puis intervalle multiplié par le facteur de facilité, borné à 1,3. L’implémentation Python et celle de démonstration TS sont comparées sur des vecteurs communs. Les réponses libres sont autoévaluées avec la correction et la grille ; aucune notation IA non configurée n’est simulée.
 
-## Limites actuelles
+## Limites assumées
 
-Application personnelle à un seul compte et un seul hôte d’état ; pas de verrou distribué entre machines. Le dédoublonnage lexical utilise les mots normalisés et une similarité Jaccard de 0,9 ; il ne remplace pas une recherche sémantique par embeddings. Les régions sources sont conservées dans les citations, mais aucun éditeur d’annotation graphique n’est fourni. Les formules sont conservées comme texte dans le lecteur et l’export principal : pas de moteur complet de rendu LaTeX dans egui. Les imports locaux passent par la CLI, pas par un glisser-déposer web. Le lecteur d’écran web du canvas nécessite encore un audit dédié. Le service worker conserve le shell public, jamais les notes privées hors ligne.
+Monoutilisateur. Le jeton du propriétaire donne accès à tout son espace autorisé ; aucun partage/multitenant. L’état est un snapshot JSON atomique, avec verrou global, adapté à une utilisation personnelle. Les exports LaTeX reproduisent le texte et les tableaux avec échappement sûr ; les expressions `$...$` sont rendues par KaTeX sur le web, tandis que Qt et le PDF Python gardent leur notation textuelle. Les formules LaTeX complexes nécessitent encore un moteur de rendu mathématique PDF/Qt dédié.
