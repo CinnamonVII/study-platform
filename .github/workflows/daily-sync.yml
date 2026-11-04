@@ -1,4 +1,4 @@
-name: Daily private revision sync
+name: Daily private revision pipeline
 on:
   schedule:
     - cron: '0 7 * * *'
@@ -6,15 +6,20 @@ on:
     - cron: '30 7 * * *'
       timezone: 'Europe/Paris'
   workflow_dispatch:
+    inputs:
+      preview:
+        type: boolean
+        default: false
+        description: 'List source changes only'
+permissions:
+  contents: read
 concurrency:
   group: study-private-sync
   cancel-in-progress: false
-permissions:
-  contents: read
 jobs:
-  sync:
-    # Same persistent host and STUDY_STATE as the API. Never use an ephemeral
-    # runner with a fresh state, nor run public pull requests on this runner.
+  daily:
+    # Dedicated persistent runner on the same host/user/state as the API.
+    # Never run public pull requests on this runner.
     runs-on: [self-hosted, linux, study-private]
     environment: study-private
     timeout-minutes: 45
@@ -24,20 +29,37 @@ jobs:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
-      GITHUB_TOKEN: ${{ secrets.STUDY_CONTENT_TOKEN }}
+      STUDY_CONTENT_TOKEN: ${{ secrets.STUDY_CONTENT_TOKEN }}
+      PREVIEW: ${{ inputs.preview }}
     steps:
       - uses: actions/checkout@v4
-      - name: Require durable configuration
+        with:
+          persist-credentials: false
+      - name: Load private configuration
         shell: bash
         run: |
           test -n "$STUDY_STATE"
-          test -n "$OPENAI_MODEL"
-          test -n "$STUDY_CONFIG_JSON"
           test -d "$STUDY_STATE"
+          test -n "$STUDY_CONFIG_JSON"
           umask 077
           printf '%s' "$STUDY_CONFIG_JSON" > "$RUNNER_TEMP/study-config.json"
-      - name: Run the shared Rust pipeline
-        run: cargo run --locked --release -p study-engine -- daily "$RUNNER_TEMP/study-config.json"
-      - name: Daily result
+          printf 'STUDY_CONFIG=%s\n' "$RUNNER_TEMP/study-config.json" >> "$GITHUB_ENV"
+      - name: Install isolated engine
+        run: |
+          python3 -m venv "$RUNNER_TEMP/study-venv"
+          "$RUNNER_TEMP/study-venv/bin/python" -m pip install -e .
+      - name: Run shared engine
+        # Logs remain on the private host, never in public Actions artifacts.
+        shell: bash
+        run: |
+          if [ "$PREVIEW" = 'true' ]; then
+            "$RUNNER_TEMP/study-venv/bin/python" -m engine.cli daily --preview >> "$STUDY_STATE/runner.log" 2>&1
+          else
+            "$RUNNER_TEMP/study-venv/bin/python" -m engine.cli daily >> "$STUDY_STATE/runner.log" 2>&1
+          fi
+      - name: Remove temporary config
         if: always()
-        run: echo 'Consulter le journal privé dans l’application. Aucune note scolaire n’est jointe aux artifacts.' >> "$GITHUB_STEP_SUMMARY"
+        run: rm -f "$RUNNER_TEMP/study-config.json"
+      - name: Private result location
+        if: always()
+        run: echo 'Consulter le journal privé dans Synchronisation. Aucun contenu scolaire joint aux artifacts.' >> "$GITHUB_STEP_SUMMARY"

@@ -1,7 +1,8 @@
-name: Deploy public demonstration shell
+name: Deploy React demonstration to Pages
 on:
   push:
     branches: [main]
+    paths: ['apps/web/**', 'schemas/snapshot-v2.json', 'fixtures/demo/snapshot-v2.json', 'scripts/pwa.mjs', '.github/workflows/deploy-pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -12,27 +13,31 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
         with:
-          targets: wasm32-unknown-unknown
-      - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@v2
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
         with:
-          tool: trunk@0.22.1
-      - name: Build Rust WebAssembly (no private credentials)
-        working-directory: crates/ui
-        run: trunk build --release --locked --public-url "/${{ github.event.repository.name }}/" --dist ../../dist
-      - run: bash scripts/prepare-pages.sh dist
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: python -m pip install 'pydantic>=2.10,<3'
+      - run: npm ci --prefix apps/web
+      - run: npm run test --prefix apps/web
+      - run: npm run build --prefix apps/web
+        env:
+          STUDY_WEB_BASE: /${{ github.event.repository.name }}/
+      - run: python scripts/check-public.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: apps/web/dist
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

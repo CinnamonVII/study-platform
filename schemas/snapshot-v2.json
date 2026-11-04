@@ -1,0 +1,763 @@
+{
+  "$defs": {
+    "Block": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "definition",
+            "explanation",
+            "steps",
+            "mechanism",
+            "comparison",
+            "timeline",
+            "warning",
+            "formula"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "columns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "title": "Sources",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "title",
+        "text",
+        "items",
+        "columns",
+        "rows",
+        "sources"
+      ],
+      "title": "Block",
+      "type": "object"
+    },
+    "Document": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "cours",
+            "devoir",
+            "exercice",
+            "correction",
+            "fiche",
+            "methode",
+            "annale"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "level": {
+          "anyOf": [
+            {
+              "enum": [
+                1,
+                2
+              ],
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Level"
+        },
+        "provenance_reason": {
+          "default": "",
+          "title": "Provenance Reason",
+          "type": "string"
+        },
+        "subject": {
+          "title": "Subject",
+          "type": "string"
+        },
+        "chapter": {
+          "title": "Chapter",
+          "type": "string"
+        },
+        "modified_at": {
+          "title": "Modified At",
+          "type": "string"
+        },
+        "content_hash": {
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/Status",
+          "default": "pending"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "original": {
+          "default": "",
+          "title": "Original",
+          "type": "string"
+        },
+        "origin_url": {
+          "default": "",
+          "title": "Origin Url",
+          "type": "string"
+        },
+        "private": {
+          "default": true,
+          "title": "Private",
+          "type": "boolean"
+        },
+        "deleted": {
+          "default": false,
+          "title": "Deleted",
+          "type": "boolean"
+        },
+        "uncertainties": {
+          "items": {
+            "$ref": "#/$defs/Uncertainty"
+          },
+          "title": "Uncertainties",
+          "type": "array"
+        },
+        "manual": {
+          "default": false,
+          "title": "Manual",
+          "type": "boolean"
+        },
+        "derived": {
+          "default": false,
+          "title": "Derived",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "level",
+        "provenance_reason",
+        "subject",
+        "chapter",
+        "modified_at",
+        "content_hash",
+        "status",
+        "sources",
+        "text",
+        "original",
+        "origin_url",
+        "private",
+        "deleted",
+        "uncertainties",
+        "manual",
+        "derived"
+      ],
+      "title": "Document",
+      "type": "object"
+    },
+    "Fiche": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "subject": {
+          "title": "Subject",
+          "type": "string"
+        },
+        "chapter": {
+          "title": "Chapter",
+          "type": "string"
+        },
+        "level": {
+          "const": 2,
+          "default": 2,
+          "title": "Level",
+          "type": "integer"
+        },
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/Block"
+          },
+          "minItems": 1,
+          "title": "Blocks",
+          "type": "array"
+        },
+        "takeaways": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Takeaways",
+          "type": "array"
+        },
+        "recall": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Recall",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "minItems": 1,
+          "title": "Sources",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/Status",
+          "default": "pending"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "title": "Updated At",
+          "type": "string"
+        },
+        "generator_version": {
+          "default": "study-0.2.0",
+          "title": "Generator Version",
+          "type": "string"
+        },
+        "dependency_hash": {
+          "default": "",
+          "title": "Dependency Hash",
+          "type": "string"
+        },
+        "notion_url": {
+          "default": "",
+          "title": "Notion Url",
+          "type": "string"
+        },
+        "manual": {
+          "default": false,
+          "title": "Manual",
+          "type": "boolean"
+        },
+        "stale": {
+          "default": false,
+          "title": "Stale",
+          "type": "boolean"
+        },
+        "private": {
+          "default": true,
+          "title": "Private",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "subject",
+        "chapter",
+        "level",
+        "blocks",
+        "takeaways",
+        "recall",
+        "sources",
+        "status",
+        "created_at",
+        "updated_at",
+        "generator_version",
+        "dependency_hash",
+        "notion_url",
+        "manual",
+        "stale",
+        "private"
+      ],
+      "title": "Fiche",
+      "type": "object"
+    },
+    "Question": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "concept_key": {
+          "title": "Concept Key",
+          "type": "string"
+        },
+        "subject": {
+          "title": "Subject",
+          "type": "string"
+        },
+        "chapter": {
+          "title": "Chapter",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "short",
+            "mcq",
+            "open",
+            "math",
+            "method",
+            "flashcard"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "cognitive": {
+          "enum": [
+            "memory",
+            "understanding",
+            "application",
+            "reasoning"
+          ],
+          "title": "Cognitive",
+          "type": "string"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "answer": {
+          "title": "Answer",
+          "type": "string"
+        },
+        "explanation": {
+          "title": "Explanation",
+          "type": "string"
+        },
+        "choices": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "correct_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Correct Indices",
+          "type": "array"
+        },
+        "traps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Traps",
+          "type": "array"
+        },
+        "steps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "rubric": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rubric",
+          "type": "array"
+        },
+        "difficulty": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Difficulty",
+          "type": "integer"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "minItems": 1,
+          "title": "Sources",
+          "type": "array"
+        },
+        "fiche_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fiche Ids",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/Status",
+          "default": "pending"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "title": "Updated At",
+          "type": "string"
+        },
+        "generator_version": {
+          "default": "study-0.2.0",
+          "title": "Generator Version",
+          "type": "string"
+        },
+        "dependency_hash": {
+          "default": "",
+          "title": "Dependency Hash",
+          "type": "string"
+        },
+        "manual": {
+          "default": false,
+          "title": "Manual",
+          "type": "boolean"
+        },
+        "stale": {
+          "default": false,
+          "title": "Stale",
+          "type": "boolean"
+        },
+        "private": {
+          "default": true,
+          "title": "Private",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "concept_key",
+        "subject",
+        "chapter",
+        "type",
+        "cognitive",
+        "prompt",
+        "answer",
+        "explanation",
+        "choices",
+        "correct_indices",
+        "traps",
+        "steps",
+        "rubric",
+        "difficulty",
+        "sources",
+        "fiche_ids",
+        "status",
+        "created_at",
+        "updated_at",
+        "generator_version",
+        "dependency_hash",
+        "manual",
+        "stale",
+        "private"
+      ],
+      "title": "Question",
+      "type": "object"
+    },
+    "Reference": {
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "quote": {
+          "default": "",
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "page",
+        "region",
+        "quote"
+      ],
+      "title": "Reference",
+      "type": "object"
+    },
+    "Review": {
+      "additionalProperties": false,
+      "properties": {
+        "question_id": {
+          "title": "Question Id",
+          "type": "string"
+        },
+        "due": {
+          "title": "Due",
+          "type": "string"
+        },
+        "interval": {
+          "default": 0,
+          "title": "Interval",
+          "type": "integer"
+        },
+        "ease": {
+          "default": 2.5,
+          "title": "Ease",
+          "type": "number"
+        },
+        "repetitions": {
+          "default": 0,
+          "title": "Repetitions",
+          "type": "integer"
+        },
+        "last_grade": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Grade"
+        }
+      },
+      "required": [
+        "question_id",
+        "due",
+        "interval",
+        "ease",
+        "repetitions",
+        "last_grade"
+      ],
+      "title": "Review",
+      "type": "object"
+    },
+    "Status": {
+      "enum": [
+        "pending",
+        "validated",
+        "rejected"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "Uncertainty": {
+      "additionalProperties": false,
+      "properties": {
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "resolved": {
+          "default": false,
+          "title": "Resolved",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "message",
+        "page",
+        "region",
+        "resolved"
+      ],
+      "title": "Uncertainty",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0",
+      "default": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "documents": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Document"
+      },
+      "title": "Documents",
+      "type": "object"
+    },
+    "fiches": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Fiche"
+      },
+      "title": "Fiches",
+      "type": "object"
+    },
+    "questions": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Question"
+      },
+      "title": "Questions",
+      "type": "object"
+    },
+    "reviews": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Review"
+      },
+      "title": "Reviews",
+      "type": "object"
+    },
+    "proposals": {
+      "additionalProperties": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Proposals",
+      "type": "object"
+    },
+    "jobs": {
+      "additionalProperties": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Jobs",
+      "type": "object"
+    },
+    "reports": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Reports",
+      "type": "array"
+    },
+    "last_success": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Success"
+    },
+    "demo": {
+      "default": false,
+      "title": "Demo",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "documents",
+    "fiches",
+    "questions",
+    "reviews",
+    "proposals",
+    "jobs",
+    "reports",
+    "last_success",
+    "demo"
+  ],
+  "title": "Snapshot",
+  "type": "object"
+}

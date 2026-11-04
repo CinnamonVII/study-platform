@@ -1,63 +1,74 @@
 # Installation et déploiement
 
-## État réel
-
-Le code est développé dans un nouveau dépôt local `/home/deck/study-platform`. Aucun autre projet n’a été modifié. Aucun dépôt distant, serveur Internet, GitHub Pages ou tâche ChatGPT n’est supposé créé. Les URL ci-dessous sont des destinations à configurer, pas des déploiements vérifiés.
-
 ## Linux / CachyOS
 
-```sh
-cargo build --locked --release -p study-ui -p study-engine -p study-server
-install -Dm755 target/release/study-ui "$HOME/.local/bin/study-ui"
-install -Dm755 target/release/study-engine "$HOME/.local/bin/study-engine"
-install -Dm755 target/release/study-server "$HOME/.local/bin/study-server"
-install -Dm644 packaging/revisions.desktop "$HOME/.local/share/applications/revisions.desktop"
-install -Dm644 packaging/revisions.svg "$HOME/.local/share/icons/hicolor/scalable/apps/revisions.svg"
-```
+Depuis le dépôt, créer un venv puis installer `python -m pip install -e '.[desktop]'`. Lancer `python -m apps.desktop.main`. L’application est un vrai client Qt et peut utiliser une API distante. La démonstration fonctionne sans serveur.
 
-`study-ui` démarre en démonstration ; Synchronisation permet de connecter le serveur. Pour le moteur, installer Typst et DejaVu Sans, puis configurer `.env.example` dans le gestionnaire de secrets ou le service. Rust n’est nécessaire qu’à la compilation. SQLite est embarqué.
+Sur CachyOS/Arch, les dépendances système usuelles sont Python, Node.js/npm, bibliothèques Qt/X11/Wayland et polices DejaVu. Le paquet Qt de pip inclut Qt ; le thème Breeze de KDE dépend des plugins présents. Ne pas mélanger pip dans le Python système : utiliser le venv. `packaging/PKGBUILD-python` propose un paquet Arch expérimental à construire depuis `packaging/` ; il n’a pas été exécuté sur CachyOS dans cette session.
 
-`scripts/appimage.sh` construit l’application graphique avec [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy/releases). Télécharger le binaire officiel, vérifier son empreinte, puis exécuter :
+### AppImage
+
+Le script utilise PyInstaller puis appimagetool. Télécharger une version d’appimagetool depuis son dépôt officiel et vérifier son empreinte, puis :
 
 ```sh
-APPIMAGE_EXTRACT_AND_RUN=1 LINUXDEPLOY=/chemin/linuxdeploy-x86_64.AppImage bash scripts/appimage.sh
+python -m pip install -e '.[desktop,package]'
+APPIMAGETOOL=/chemin/appimagetool-x86_64.AppImage bash scripts/appimage-python.sh
+chmod +x dist/Revisions-0.2.0-x86_64.AppImage
+./dist/Revisions-0.2.0-x86_64.AppImage
 ```
 
-Le paquet Arch `packaging/PKGBUILD` est préparé pour un futur tag `v0.1.0` du dépôt dédié ; il ne doit pas être présenté comme publié dans AUR. Compiler l’AppImage sur la distribution la plus ancienne visée : AppImage n’efface pas les exigences de version de glibc. Les essais locaux ont lieu sur cette machine SteamOS, pas sur un CachyOS distant.
+Si FUSE est indisponible, utiliser `--appimage-extract-and-run`. La construction actuelle cible x86_64 et la glibc de l’hôte de build ; CachyOS récent est visé. Pour distribuer à des Linux plus anciens, construire dans une image avec une glibc de référence plus ancienne. Aucun certificat de signature éditeur n’est configuré.
 
-## Backend privé
+## API privée persistante
 
-Créer un utilisateur de service `study`, copier le binaire dans `/opt/study-platform`, les secrets en mode 0600 dans `/etc/study-platform/secrets.env`, et la configuration des sources dans `/etc/study-platform/config.json`. Le service fourni utilise `/var/lib/study-platform` comme état persistant. Installer Typst dans un répertoire lisible par le service et renseigner `TYPST_BIN` si nécessaire.
+Choix livré : FastAPI sur un serveur Linux persistant, avec reverse proxy HTTPS. Cloudflare Workers n’est pas nécessaire. Ne pas publier le port 8787 directement.
 
-Le fichier `packaging/study-platform.service` est un modèle systemd à adapter. Le backend écoute par défaut sur `127.0.0.1:8787`. Le publier derrière un proxy HTTPS, configurer `STUDY_ORIGIN=https://cinnamonvii.github.io` pour Pages ou l’origine réellement utilisée. Les jetons d’API et les données ne doivent jamais être placés sur Pages.
+1. Créer un utilisateur système `study`, un checkout `/srv/study-platform/code`, un venv `/srv/study-platform/venv` et un répertoire `/srv/study-platform/private` possédé par cet utilisateur, mode 700.
+2. Installer `pip install -e /srv/study-platform/code` dans le venv.
+3. Écrire `/srv/study-platform/config.json` selon NOTION_SETUP, mode 600.
+4. Écrire `/srv/study-platform/secrets.env`, mode 600, à partir de `.env.python.example`. Ce sont des variables système, jamais des assets web.
+5. Installer `packaging/study-python.service`, adapter les chemins, puis activer le service. La configuration est un exemple d’administration à appliquer sur son propre serveur, pas une action réalisée ici.
+6. Configurer Caddy/nginx devant `127.0.0.1:8787`, TLS valide et limite de requêtes. Ajouter exactement l’origine GitHub Pages à `allowed_origins`, sans chemin.
+7. Vérifier `/health`, puis l’accès authentifié `/v1/snapshot` et le refus d’une requête sans jeton.
 
-Exemple de test local : `STUDY_BIND=127.0.0.1:8787`, `STUDY_ORIGIN=http://127.0.0.1:8088`, un `STUDY_TOKEN` aléatoire et le même `STUDY_STATE` que le moteur. Dans l’application, saisir cette adresse et ce jeton. Ne pas employer un jeton d’exemple en production.
+| Variable | Où | Autorisation / usage |
+| --- | --- | --- |
+| `STUDY_STATE` | serveur et runner | même répertoire durable privé |
+| `STUDY_CONFIG` | serveur | chemin du fichier d’allowlist |
+| `STUDY_API_TOKEN` | serveur | valeur aléatoire d’au moins 32 caractères ; `openssl rand -hex 32` recommandé |
+| `NOTION_TOKEN` | serveur et secret Actions | intégration interne limitée aux sources/destinations |
+| `OPENAI_API_KEY` | serveur et secret Actions | compte API avec facturation/crédits et modèle autorisé |
+| `OPENAI_MODEL` | serveur et variable Actions | modèle acceptant images/PDF et sorties structurées, choisi explicitement |
+| `STUDY_CONTENT_TOKEN` | serveur et secret Actions | fine-grained PAT du seul dépôt privé de données, Contents read/write et Pull requests read/write |
 
-## Dépôts GitHub dédiés
+Un abonnement ChatGPT et une connexion MCP ne constituent pas automatiquement des crédits API ou des secrets de runner. Vérifier les accès réels dans ses comptes.
 
-Créer `CinnamonVII/study-platform` pour le code et, si les notes doivent être archivées sur GitHub, `CinnamonVII/study-platform-data` **privé**. Initialiser ce dernier avec au moins un commit, sans source manuscrite. Ne pas sélectionner un autre projet existant.
+## GitHub de données
 
-Configurer le remote du nouveau dépôt local puis pousser le code. Activer Settings → Pages → GitHub Actions. Le workflow Pages compile seulement `crates/ui` et ses fixtures ; `check-static.sh` refuse les formats privés dans `dist`. La disponibilité de Pages depuis un dépôt privé dépend du compte GitHub : conserver la séparation code public / contenu privé si nécessaire.
+Le dépôt de code `CinnamonVII/study-platform` est public. Créer ou sélectionner **séparément** un dépôt privé de données, puis renseigner son nom dans la configuration. Aucun dépôt supplémentaire n’est créé par ce code. Laisser `github_repository` vide pour désactiver la publication GitHub tout en utilisant Notion et l’API.
 
-Le workflow produit l’URL effective dans son environnement `github-pages`. Il faut attendre un vrai run réussi avant de déclarer cette URL déployée.
+Les sorties validées sont écrites dans une branche déterministe et une PR brouillon. Les sources privées originales ne sont pas copiées. La fusion reste une action humaine. Une sortie non validée se refuse via son statut ou sa proposition ; elle n’est pas publiée. Une PR déjà publiée se ferme/revoit sur GitHub, les données publiques ne sont jamais révoquées automatiquement.
 
-## Routine quotidienne indépendante de ChatGPT
+## GitHub Pages
 
-Installer un runner GitHub Actions **privé, persistant**, étiqueté `study-private`, sur le même hôte que l’API. Il doit accéder au même `STUDY_STATE`, à Rust, Typst, aux polices et au réseau des API. Restreindre le runner au dépôt dédié et aux branches approuvées ; les tests de pull requests utilisent les runners hébergés et ne doivent pas exécuter de code non approuvé sur cet hôte.
+```sh
+npm ci --prefix apps/web
+npm run build --prefix apps/web
+python scripts/check-public.py
+```
 
-Créer l’environnement GitHub `study-private` avec ces secrets :
+Dans Settings → Pages, choisir GitHub Actions. Le workflow `deploy-pages.yml` publie `apps/web/dist` après fusion dans `main` ou déclenchement manuel. Aucun secret Notion/GitHub/IA n’est disponible dans ce job. `STUDY_WEB_BASE` ne contient que le préfixe du dépôt. L’URL habituelle attendue est `https://cinnamonvii.github.io/study-platform/` ; elle ne prouve pas qu’une nouvelle version a été déployée.
 
-| Secret | Usage minimal |
-| --- | --- |
-| `NOTION_TOKEN` | Lecture des sources autorisées et insertion sous les destinations autorisées |
-| `OPENAI_API_KEY` | API du modèle multimodal, distincte de l’abonnement ChatGPT |
-| `STUDY_CONTENT_TOKEN` | Token GitHub limité au dépôt de contenu privé : Contents et Pull requests en écriture |
-| `STUDY_CONFIG_JSON` | Contenu JSON de la configuration privée des pages |
+La PWA précache uniquement une liste de fichiers statiques construits, jamais les réponses privées. Elle retire ses anciens caches. En mode privé, une connexion réseau au backend reste nécessaire. La déconnexion retire le jeton et les contenus privés de l’interface. Les réponses libres privées ne sont pas enregistrées dans localStorage.
 
-Variables : `STUDY_STATE` (chemin absolu commun, préexistant) et `OPENAI_MODEL` (modèle compatible avec Responses, images/PDF et JSON Schema, choisi dans le compte API). Le workflow utilise `cron: '0 7 * * *'` et `timezone: 'Europe/Paris'`, plus une reprise à 7 h 30 et `workflow_dispatch`. Le second passage ne régénère pas les documents déjà traités. Les validations humaines permettent une publication ultérieure même sans nouvelles sources.
+## Actions quotidiennes
 
-La tâche ChatGPT utilise les connexions qu’elle possède réellement ; pour lancer un traitement, elle doit déclencher ce même workflow si l’app GitHub le permet. Elle ne doit pas lancer un deuxième moteur avec un autre état. Le verrou local couvre les appels API et le workflow. Les retards de planification de la plateforme restent possibles.
+Configurer un runner Linux **dédié et persistant** avec les labels `self-hosted`, `linux`, `study-private`, sous le même utilisateur/volume que l’API. Le snapshot et le verrou ne doivent jamais être neufs à chaque exécution. Ne pas y exécuter des jobs de PR publiques ou du code non fiable. Pour une exploitation avec plusieurs contributeurs, préférer un dépôt d’automatisation privé séparé et durcir l’isolation du runner.
 
-## Références vérifiées
+Créer l’environnement GitHub `study-private`, puis y mettre les secrets `STUDY_CONFIG_JSON`, `NOTION_TOKEN`, `OPENAI_API_KEY`, `STUDY_CONTENT_TOKEN` si activé, et les variables `STUDY_STATE`, `OPENAI_MODEL`. La valeur JSON contient l’allowlist privée. Les logs du pipeline restent sur le serveur. Les logs d’installation de dépendances ne contiennent pas les documents.
 
-[Planification GitHub Actions et fuseaux](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onschedule), [lecture paginée des blocs Notion](https://developers.notion.com/reference/get-block-children), [sorties structurées Responses](https://developers.openai.com/api/docs/guides/structured-outputs), [eframe natif et web](https://docs.rs/eframe/0.33.3/eframe/).
+Le workflow utilise `cron: '0 7 * * *'`, `timezone: 'Europe/Paris'`, puis un passage à 7 h 30 et `workflow_dispatch`. La documentation GitHub actuelle prend en charge le champ timezone. Les horaires peuvent être retardés par GitHub : ce n’est pas un ordonnanceur temps réel. Le traitement compare toujours l’inventaire et les jobs déjà réussis ; le second passage récupère les changements manqués et ne régénère pas les mêmes contenus.
+
+## Sauvegarde / exploitation
+
+Sauvegarder de façon chiffrée `STUDY_STATE`, la configuration et les secrets séparément. Les fichiers originaux sont immuables mais le disque ne se sauvegarde pas tout seul. Surveiller le dernier succès et les jobs échoués dans Synchronisation. Un verrou bloqué par un processus vivant impose d’attendre ou d’inspecter le processus ; ne pas supprimer aveuglément l’état. `flock` se libère à la sortie du processus.

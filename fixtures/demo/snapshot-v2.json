@@ -1,0 +1,1000 @@
+{
+  "schema_version": "2.0",
+  "documents": {
+    "demo-0": {
+      "id": "demo-0",
+      "title": "Suites arithmétiques · document fictif",
+      "kind": "cours",
+      "level": 1,
+      "provenance_reason": "Fixture explicitement classée : notes personnelles fictives",
+      "subject": "Mathématiques",
+      "chapter": "Suites arithmétiques",
+      "modified_at": "2026-11-04T07:32:25.529917+00:00",
+      "content_hash": "f3286a49802687053845384b8cd96ec71263292c29cb302172027bafc703b8e6",
+      "status": "validated",
+      "sources": [],
+      "text": "Suite arithmétique : on ajoute une raison constante r à chaque terme.\nu₀ = 3 ; r = 2.\nu₁ = 3 + 2 = 5\nu₂ = 5 + 2 = 7\nuₙ = u₀ + n × r",
+      "original": "",
+      "origin_url": "",
+      "private": false,
+      "deleted": false,
+      "uncertainties": [],
+      "manual": false,
+      "derived": false
+    },
+    "demo-1": {
+      "id": "demo-1",
+      "title": "Marché concurrentiel · document fictif",
+      "kind": "devoir",
+      "level": 1,
+      "provenance_reason": "Fixture explicitement classée : notes personnelles fictives",
+      "subject": "SES",
+      "chapter": "Marché concurrentiel",
+      "modified_at": "2026-11-04T07:32:25.529967+00:00",
+      "content_hash": "0bae4b786bd7e14d1e4fd63908f3320c096ff7d1ba02e8dc969d3287a6e6d8a3",
+      "status": "validated",
+      "sources": [],
+      "text": "Prix d’équilibre : prix pour lequel la quantité offerte égale la quantité demandée.\nHausse de la demande\nDéplacement de la demande vers la droite\nNouveau prix d’équilibre plus élevé\nQuantité échangée plus élevée",
+      "original": "",
+      "origin_url": "",
+      "private": false,
+      "deleted": false,
+      "uncertainties": [],
+      "manual": false,
+      "derived": false
+    },
+    "demo-2": {
+      "id": "demo-2",
+      "title": "Comprendre la démocratie · document fictif",
+      "kind": "cours",
+      "level": 1,
+      "provenance_reason": "Fixture explicitement classée : notes personnelles fictives",
+      "subject": "HGGSP",
+      "chapter": "Comprendre la démocratie",
+      "modified_at": "2026-11-04T07:32:25.529979+00:00",
+      "content_hash": "3c408daff996f0c1c70eaec2f15815e6b1b6e77fe50e884050de03b8862e834f",
+      "status": "validated",
+      "sources": [],
+      "text": "Démocratie représentative : les citoyens élisent des représentants qui prennent les décisions.\nCitoyens\nÉlections\nReprésentants\nDécisions politiques",
+      "original": "",
+      "origin_url": "",
+      "private": false,
+      "deleted": false,
+      "uncertainties": [],
+      "manual": false,
+      "derived": false
+    },
+    "demo-3": {
+      "id": "demo-3",
+      "title": "Analyse de texte · document fictif",
+      "kind": "methode",
+      "level": 1,
+      "provenance_reason": "Fixture explicitement classée : notes personnelles fictives",
+      "subject": "Français",
+      "chapter": "Analyse de texte",
+      "modified_at": "2026-11-04T07:32:25.529987+00:00",
+      "content_hash": "846d92575af8c05b3fb4009a453a84761b8e96781277083347e6285938061cf7",
+      "status": "validated",
+      "sources": [],
+      "text": "Analyse littéraire : relier une observation précise à une interprétation.\nFormuler une idée\nCiter brièvement le texte\nIdentifier le procédé\nExpliquer son effet",
+      "original": "",
+      "origin_url": "",
+      "private": false,
+      "deleted": false,
+      "uncertainties": [],
+      "manual": false,
+      "derived": false
+    }
+  },
+  "fiches": {
+    "fiche-f15e8ca464fc6c106d7135c2": {
+      "id": "fiche-f15e8ca464fc6c106d7135c2",
+      "title": "Suites arithmétiques",
+      "subject": "Mathématiques",
+      "chapter": "Suites arithmétiques",
+      "level": 2,
+      "blocks": [
+        {
+          "kind": "definition",
+          "title": "La notion",
+          "text": "Suite arithmétique : on ajoute une raison constante r à chaque terme.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-0",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "steps",
+          "title": "Comprendre le raisonnement",
+          "text": "",
+          "items": [
+            "u₀ = 3 ; r = 2.",
+            "u₁ = 3 + 2 = 5",
+            "u₂ = 5 + 2 = 7",
+            "uₙ = u₀ + n × r"
+          ],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-0",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "warning",
+          "title": "Le piège",
+          "text": "Relie chaque étape à la précédente. Vérifie les conditions avant de conclure.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-0",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        }
+      ],
+      "takeaways": [
+        "Suite arithmétique : on ajoute une raison constante r à chaque terme.",
+        "uₙ = u₀ + n × r"
+      ],
+      "recall": [
+        "Peux-tu définir la notion sans regarder ?",
+        "Peux-tu expliquer chaque étape ?"
+      ],
+      "sources": [
+        {
+          "document_id": "demo-0",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.533245+00:00",
+      "updated_at": "2026-11-04T07:32:25.533252+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "fc682a20e37062b6fa2b4112ee5feb013a9ef38f059300645cd65b73e67f79fa",
+      "notion_url": "",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "fiche-03cf5ecedce822ba34e719e0": {
+      "id": "fiche-03cf5ecedce822ba34e719e0",
+      "title": "Marché concurrentiel",
+      "subject": "SES",
+      "chapter": "Marché concurrentiel",
+      "level": 2,
+      "blocks": [
+        {
+          "kind": "definition",
+          "title": "La notion",
+          "text": "Prix d’équilibre : prix pour lequel la quantité offerte égale la quantité demandée.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-1",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "mechanism",
+          "title": "Comprendre le raisonnement",
+          "text": "",
+          "items": [
+            "Hausse de la demande",
+            "Déplacement de la demande vers la droite",
+            "Nouveau prix d’équilibre plus élevé",
+            "Quantité échangée plus élevée"
+          ],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-1",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "warning",
+          "title": "Le piège",
+          "text": "Relie chaque étape à la précédente. Vérifie les conditions avant de conclure.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-1",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        }
+      ],
+      "takeaways": [
+        "Prix d’équilibre : prix pour lequel la quantité offerte égale la quantité demandée.",
+        "Quantité échangée plus élevée"
+      ],
+      "recall": [
+        "Peux-tu définir la notion sans regarder ?",
+        "Peux-tu expliquer chaque étape ?"
+      ],
+      "sources": [
+        {
+          "document_id": "demo-1",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.535475+00:00",
+      "updated_at": "2026-11-04T07:32:25.535480+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "b050f80a559021852b3cd3235f3ca839d972c25e904f714732b7b0ebb63a3623",
+      "notion_url": "",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "fiche-144520b1beba578d5c0ecac0": {
+      "id": "fiche-144520b1beba578d5c0ecac0",
+      "title": "Comprendre la démocratie",
+      "subject": "HGGSP",
+      "chapter": "Comprendre la démocratie",
+      "level": 2,
+      "blocks": [
+        {
+          "kind": "definition",
+          "title": "La notion",
+          "text": "Démocratie représentative : les citoyens élisent des représentants qui prennent les décisions.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-2",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "mechanism",
+          "title": "Comprendre le raisonnement",
+          "text": "",
+          "items": [
+            "Citoyens",
+            "Élections",
+            "Représentants",
+            "Décisions politiques"
+          ],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-2",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "warning",
+          "title": "Le piège",
+          "text": "Relie chaque étape à la précédente. Vérifie les conditions avant de conclure.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-2",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        }
+      ],
+      "takeaways": [
+        "Démocratie représentative : les citoyens élisent des représentants qui prennent les décisions.",
+        "Décisions politiques"
+      ],
+      "recall": [
+        "Peux-tu définir la notion sans regarder ?",
+        "Peux-tu expliquer chaque étape ?"
+      ],
+      "sources": [
+        {
+          "document_id": "demo-2",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.537851+00:00",
+      "updated_at": "2026-11-04T07:32:25.537856+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "d315f53a84cfe72ae2afea9408e157ab6a0e837ed16bc857963f1e5199b8cce2",
+      "notion_url": "",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "fiche-b7a70209d1837544f8770e1e": {
+      "id": "fiche-b7a70209d1837544f8770e1e",
+      "title": "Analyse de texte",
+      "subject": "Français",
+      "chapter": "Analyse de texte",
+      "level": 2,
+      "blocks": [
+        {
+          "kind": "definition",
+          "title": "La notion",
+          "text": "Analyse littéraire : relier une observation précise à une interprétation.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-3",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "steps",
+          "title": "Comprendre le raisonnement",
+          "text": "",
+          "items": [
+            "Formuler une idée",
+            "Citer brièvement le texte",
+            "Identifier le procédé",
+            "Expliquer son effet"
+          ],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-3",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        },
+        {
+          "kind": "warning",
+          "title": "Le piège",
+          "text": "Relie chaque étape à la précédente. Vérifie les conditions avant de conclure.",
+          "items": [],
+          "columns": [],
+          "rows": [],
+          "sources": [
+            {
+              "document_id": "demo-3",
+              "page": null,
+              "region": null,
+              "quote": ""
+            }
+          ]
+        }
+      ],
+      "takeaways": [
+        "Analyse littéraire : relier une observation précise à une interprétation.",
+        "Expliquer son effet"
+      ],
+      "recall": [
+        "Peux-tu définir la notion sans regarder ?",
+        "Peux-tu expliquer chaque étape ?"
+      ],
+      "sources": [
+        {
+          "document_id": "demo-3",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.540212+00:00",
+      "updated_at": "2026-11-04T07:32:25.540217+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "7e4de008cdeae9bca42b805e56b8519a1023788b881cf46d8d08588e383bcb72",
+      "notion_url": "",
+      "manual": false,
+      "stale": false,
+      "private": false
+    }
+  },
+  "questions": {
+    "q-283c51fc7f562dc598fa699d": {
+      "id": "q-283c51fc7f562dc598fa699d",
+      "concept_key": "definition",
+      "subject": "Mathématiques",
+      "chapter": "Suites arithmétiques",
+      "type": "short",
+      "cognitive": "memory",
+      "prompt": "Définis la notion centrale : Suites arithmétiques.",
+      "answer": "Suite arithmétique : on ajoute une raison constante r à chaque terme.",
+      "explanation": "Conserve les conditions indiquées dans le document.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 1,
+      "sources": [
+        {
+          "document_id": "demo-0",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-f15e8ca464fc6c106d7135c2"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.533268+00:00",
+      "updated_at": "2026-11-04T07:32:25.533269+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "fc682a20e37062b6fa2b4112ee5feb013a9ef38f059300645cd65b73e67f79fa",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-2e87340da5185ac3f220d355": {
+      "id": "q-2e87340da5185ac3f220d355",
+      "concept_key": "mechanism",
+      "subject": "Mathématiques",
+      "chapter": "Suites arithmétiques",
+      "type": "math",
+      "cognitive": "application",
+      "prompt": "Retrouve et explique les étapes du document : Suites arithmétiques.",
+      "answer": "u₀ = 3 ; r = 2.\nu₁ = 3 + 2 = 5\nu₂ = 5 + 2 = 7\nuₙ = u₀ + n × r",
+      "explanation": "Le raisonnement doit conserver les étapes intermédiaires.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [
+        "u₀ = 3 ; r = 2.",
+        "u₁ = 3 + 2 = 5",
+        "u₂ = 5 + 2 = 7",
+        "uₙ = u₀ + n × r"
+      ],
+      "rubric": [
+        "Notion définie",
+        "Étapes justifiées",
+        "Conclusion reliée à la consigne"
+      ],
+      "difficulty": 3,
+      "sources": [
+        {
+          "document_id": "demo-0",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-f15e8ca464fc6c106d7135c2"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.533281+00:00",
+      "updated_at": "2026-11-04T07:32:25.533283+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "fc682a20e37062b6fa2b4112ee5feb013a9ef38f059300645cd65b73e67f79fa",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-c385e65b3a002113ab92d361": {
+      "id": "q-c385e65b3a002113ab92d361",
+      "concept_key": "recognition",
+      "subject": "Mathématiques",
+      "chapter": "Suites arithmétiques",
+      "type": "mcq",
+      "cognitive": "understanding",
+      "prompt": "Quel énoncé est fidèle au document ?",
+      "answer": "Suite arithmétique : on ajoute une raison constante r à chaque terme.",
+      "explanation": "Le premier choix reprend la définition source.",
+      "choices": [
+        "Suite arithmétique : on ajoute une raison constante r à chaque terme.",
+        "Une conclusion est vraie sans vérifier les conditions.",
+        "Les étapes intermédiaires sont toujours inutiles."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "traps": [
+        "Le deuxième choix oublie les conditions.",
+        "Le troisième choix supprime le raisonnement."
+      ],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 2,
+      "sources": [
+        {
+          "document_id": "demo-0",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-f15e8ca464fc6c106d7135c2"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.533293+00:00",
+      "updated_at": "2026-11-04T07:32:25.533295+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "fc682a20e37062b6fa2b4112ee5feb013a9ef38f059300645cd65b73e67f79fa",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-ac1eb399ae4ff394833570a0": {
+      "id": "q-ac1eb399ae4ff394833570a0",
+      "concept_key": "definition",
+      "subject": "SES",
+      "chapter": "Marché concurrentiel",
+      "type": "short",
+      "cognitive": "memory",
+      "prompt": "Définis la notion centrale : Marché concurrentiel.",
+      "answer": "Prix d’équilibre : prix pour lequel la quantité offerte égale la quantité demandée.",
+      "explanation": "Conserve les conditions indiquées dans le document.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 1,
+      "sources": [
+        {
+          "document_id": "demo-1",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-03cf5ecedce822ba34e719e0"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.535490+00:00",
+      "updated_at": "2026-11-04T07:32:25.535491+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "b050f80a559021852b3cd3235f3ca839d972c25e904f714732b7b0ebb63a3623",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-5bad7032d4b1a829afdc9f6e": {
+      "id": "q-5bad7032d4b1a829afdc9f6e",
+      "concept_key": "mechanism",
+      "subject": "SES",
+      "chapter": "Marché concurrentiel",
+      "type": "method",
+      "cognitive": "application",
+      "prompt": "Retrouve et explique les étapes du document : Marché concurrentiel.",
+      "answer": "Hausse de la demande\nDéplacement de la demande vers la droite\nNouveau prix d’équilibre plus élevé\nQuantité échangée plus élevée",
+      "explanation": "Le raisonnement doit conserver les étapes intermédiaires.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [
+        "Hausse de la demande",
+        "Déplacement de la demande vers la droite",
+        "Nouveau prix d’équilibre plus élevé",
+        "Quantité échangée plus élevée"
+      ],
+      "rubric": [
+        "Notion définie",
+        "Étapes justifiées",
+        "Conclusion reliée à la consigne"
+      ],
+      "difficulty": 3,
+      "sources": [
+        {
+          "document_id": "demo-1",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-03cf5ecedce822ba34e719e0"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.535501+00:00",
+      "updated_at": "2026-11-04T07:32:25.535502+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "b050f80a559021852b3cd3235f3ca839d972c25e904f714732b7b0ebb63a3623",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-580c4d31173c6f0d794fce46": {
+      "id": "q-580c4d31173c6f0d794fce46",
+      "concept_key": "recognition",
+      "subject": "SES",
+      "chapter": "Marché concurrentiel",
+      "type": "mcq",
+      "cognitive": "understanding",
+      "prompt": "Quel énoncé est fidèle au document ?",
+      "answer": "Prix d’équilibre : prix pour lequel la quantité offerte égale la quantité demandée.",
+      "explanation": "Le premier choix reprend la définition source.",
+      "choices": [
+        "Prix d’équilibre : prix pour lequel la quantité offerte égale la quantité demandée.",
+        "Une conclusion est vraie sans vérifier les conditions.",
+        "Les étapes intermédiaires sont toujours inutiles."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "traps": [
+        "Le deuxième choix oublie les conditions.",
+        "Le troisième choix supprime le raisonnement."
+      ],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 2,
+      "sources": [
+        {
+          "document_id": "demo-1",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-03cf5ecedce822ba34e719e0"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.535509+00:00",
+      "updated_at": "2026-11-04T07:32:25.535510+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "b050f80a559021852b3cd3235f3ca839d972c25e904f714732b7b0ebb63a3623",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-0718f75d5e0dd3f403e29311": {
+      "id": "q-0718f75d5e0dd3f403e29311",
+      "concept_key": "definition",
+      "subject": "HGGSP",
+      "chapter": "Comprendre la démocratie",
+      "type": "short",
+      "cognitive": "memory",
+      "prompt": "Définis la notion centrale : Comprendre la démocratie.",
+      "answer": "Démocratie représentative : les citoyens élisent des représentants qui prennent les décisions.",
+      "explanation": "Conserve les conditions indiquées dans le document.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 1,
+      "sources": [
+        {
+          "document_id": "demo-2",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-144520b1beba578d5c0ecac0"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.537868+00:00",
+      "updated_at": "2026-11-04T07:32:25.537869+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "d315f53a84cfe72ae2afea9408e157ab6a0e837ed16bc857963f1e5199b8cce2",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-2a3560409af896ad36ffd3ce": {
+      "id": "q-2a3560409af896ad36ffd3ce",
+      "concept_key": "mechanism",
+      "subject": "HGGSP",
+      "chapter": "Comprendre la démocratie",
+      "type": "method",
+      "cognitive": "application",
+      "prompt": "Retrouve et explique les étapes du document : Comprendre la démocratie.",
+      "answer": "Citoyens\nÉlections\nReprésentants\nDécisions politiques",
+      "explanation": "Le raisonnement doit conserver les étapes intermédiaires.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [
+        "Citoyens",
+        "Élections",
+        "Représentants",
+        "Décisions politiques"
+      ],
+      "rubric": [
+        "Notion définie",
+        "Étapes justifiées",
+        "Conclusion reliée à la consigne"
+      ],
+      "difficulty": 3,
+      "sources": [
+        {
+          "document_id": "demo-2",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-144520b1beba578d5c0ecac0"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.537878+00:00",
+      "updated_at": "2026-11-04T07:32:25.537879+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "d315f53a84cfe72ae2afea9408e157ab6a0e837ed16bc857963f1e5199b8cce2",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-f8b550ed9b7ce9d97aaeb069": {
+      "id": "q-f8b550ed9b7ce9d97aaeb069",
+      "concept_key": "recognition",
+      "subject": "HGGSP",
+      "chapter": "Comprendre la démocratie",
+      "type": "mcq",
+      "cognitive": "understanding",
+      "prompt": "Quel énoncé est fidèle au document ?",
+      "answer": "Démocratie représentative : les citoyens élisent des représentants qui prennent les décisions.",
+      "explanation": "Le premier choix reprend la définition source.",
+      "choices": [
+        "Démocratie représentative : les citoyens élisent des représentants qui prennent les décisions.",
+        "Une conclusion est vraie sans vérifier les conditions.",
+        "Les étapes intermédiaires sont toujours inutiles."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "traps": [
+        "Le deuxième choix oublie les conditions.",
+        "Le troisième choix supprime le raisonnement."
+      ],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 2,
+      "sources": [
+        {
+          "document_id": "demo-2",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-144520b1beba578d5c0ecac0"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.537886+00:00",
+      "updated_at": "2026-11-04T07:32:25.537887+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "d315f53a84cfe72ae2afea9408e157ab6a0e837ed16bc857963f1e5199b8cce2",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-95daeb766bfc84e1b0d22f13": {
+      "id": "q-95daeb766bfc84e1b0d22f13",
+      "concept_key": "definition",
+      "subject": "Français",
+      "chapter": "Analyse de texte",
+      "type": "short",
+      "cognitive": "memory",
+      "prompt": "Définis la notion centrale : Analyse de texte.",
+      "answer": "Analyse littéraire : relier une observation précise à une interprétation.",
+      "explanation": "Conserve les conditions indiquées dans le document.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 1,
+      "sources": [
+        {
+          "document_id": "demo-3",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-b7a70209d1837544f8770e1e"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.540227+00:00",
+      "updated_at": "2026-11-04T07:32:25.540228+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "7e4de008cdeae9bca42b805e56b8519a1023788b881cf46d8d08588e383bcb72",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-6c05f1139dd2c2f420d44b68": {
+      "id": "q-6c05f1139dd2c2f420d44b68",
+      "concept_key": "mechanism",
+      "subject": "Français",
+      "chapter": "Analyse de texte",
+      "type": "method",
+      "cognitive": "application",
+      "prompt": "Retrouve et explique les étapes du document : Analyse de texte.",
+      "answer": "Formuler une idée\nCiter brièvement le texte\nIdentifier le procédé\nExpliquer son effet",
+      "explanation": "Le raisonnement doit conserver les étapes intermédiaires.",
+      "choices": [],
+      "correct_indices": [],
+      "traps": [],
+      "steps": [
+        "Formuler une idée",
+        "Citer brièvement le texte",
+        "Identifier le procédé",
+        "Expliquer son effet"
+      ],
+      "rubric": [
+        "Notion définie",
+        "Étapes justifiées",
+        "Conclusion reliée à la consigne"
+      ],
+      "difficulty": 3,
+      "sources": [
+        {
+          "document_id": "demo-3",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-b7a70209d1837544f8770e1e"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.540236+00:00",
+      "updated_at": "2026-11-04T07:32:25.540238+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "7e4de008cdeae9bca42b805e56b8519a1023788b881cf46d8d08588e383bcb72",
+      "manual": false,
+      "stale": false,
+      "private": false
+    },
+    "q-fc4d3377bb17fdb1269aa374": {
+      "id": "q-fc4d3377bb17fdb1269aa374",
+      "concept_key": "recognition",
+      "subject": "Français",
+      "chapter": "Analyse de texte",
+      "type": "mcq",
+      "cognitive": "understanding",
+      "prompt": "Quel énoncé est fidèle au document ?",
+      "answer": "Analyse littéraire : relier une observation précise à une interprétation.",
+      "explanation": "Le premier choix reprend la définition source.",
+      "choices": [
+        "Analyse littéraire : relier une observation précise à une interprétation.",
+        "Une conclusion est vraie sans vérifier les conditions.",
+        "Les étapes intermédiaires sont toujours inutiles."
+      ],
+      "correct_indices": [
+        0
+      ],
+      "traps": [
+        "Le deuxième choix oublie les conditions.",
+        "Le troisième choix supprime le raisonnement."
+      ],
+      "steps": [],
+      "rubric": [],
+      "difficulty": 2,
+      "sources": [
+        {
+          "document_id": "demo-3",
+          "page": null,
+          "region": null,
+          "quote": ""
+        }
+      ],
+      "fiche_ids": [
+        "fiche-b7a70209d1837544f8770e1e"
+      ],
+      "status": "validated",
+      "created_at": "2026-11-04T07:32:25.540244+00:00",
+      "updated_at": "2026-11-04T07:32:25.540245+00:00",
+      "generator_version": "study-0.2.0",
+      "dependency_hash": "7e4de008cdeae9bca42b805e56b8519a1023788b881cf46d8d08588e383bcb72",
+      "manual": false,
+      "stale": false,
+      "private": false
+    }
+  },
+  "reviews": {},
+  "proposals": {},
+  "jobs": {
+    "fiche-f15e8ca464fc6c106d7135c2:fc682a20e37062b6fa2b4112ee5feb013a9ef38f059300645cd65b73e67f79fa": {
+      "status": "complete",
+      "at": "2026-11-04T07:32:25.533717+00:00"
+    },
+    "fiche-03cf5ecedce822ba34e719e0:b050f80a559021852b3cd3235f3ca839d972c25e904f714732b7b0ebb63a3623": {
+      "status": "complete",
+      "at": "2026-11-04T07:32:25.535638+00:00"
+    },
+    "fiche-144520b1beba578d5c0ecac0:d315f53a84cfe72ae2afea9408e157ab6a0e837ed16bc857963f1e5199b8cce2": {
+      "status": "complete",
+      "at": "2026-11-04T07:32:25.537991+00:00"
+    },
+    "fiche-b7a70209d1837544f8770e1e:7e4de008cdeae9bca42b805e56b8519a1023788b881cf46d8d08588e383bcb72": {
+      "status": "complete",
+      "at": "2026-11-04T07:32:25.540347+00:00"
+    }
+  },
+  "reports": [
+    {
+      "at": "2026-11-04T07:32:25.530075+00:00",
+      "changed": [
+        "demo-0",
+        "demo-1",
+        "demo-2",
+        "demo-3"
+      ],
+      "deleted": [],
+      "fiches": [
+        "fiche-f15e8ca464fc6c106d7135c2",
+        "fiche-03cf5ecedce822ba34e719e0",
+        "fiche-144520b1beba578d5c0ecac0",
+        "fiche-b7a70209d1837544f8770e1e"
+      ],
+      "questions": [
+        "q-283c51fc7f562dc598fa699d",
+        "q-2e87340da5185ac3f220d355",
+        "q-c385e65b3a002113ab92d361",
+        "q-ac1eb399ae4ff394833570a0",
+        "q-5bad7032d4b1a829afdc9f6e",
+        "q-580c4d31173c6f0d794fce46",
+        "q-0718f75d5e0dd3f403e29311",
+        "q-2a3560409af896ad36ffd3ce",
+        "q-f8b550ed9b7ce9d97aaeb069",
+        "q-95daeb766bfc84e1b0d22f13",
+        "q-6c05f1139dd2c2f420d44b68",
+        "q-fc4d3377bb17fdb1269aa374"
+      ],
+      "errors": []
+    }
+  ],
+  "last_success": "2026-11-04T07:32:25.541278+00:00",
+  "demo": true
+}

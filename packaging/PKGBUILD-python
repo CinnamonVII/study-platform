@@ -1,0 +1,21 @@
+# Run from packaging: makepkg -p PKGBUILD-python
+pkgname=study-platform-qt
+pkgver=0.2.0
+pkgrel=1
+pkgdesc='Private revision platform, native Qt frontend'
+arch=('x86_64')
+url='https://github.com/CinnamonVII/study-platform'
+license=('MIT')
+depends=('python' 'pyside6' 'python-httpx' 'python-pydantic' 'python-reportlab' 'python-pillow' 'ttf-dejavu')
+makedepends=()
+package() {
+  install -dm755 "$pkgdir/opt/study-platform"
+  cp -r "$startdir/../apps" "$startdir/../engine" "$startdir/../fixtures" "$startdir/../prompts" "$pkgdir/opt/study-platform/"
+  rm -rf "$pkgdir/opt/study-platform/apps/web"
+  find "$pkgdir/opt/study-platform" -name __pycache__ -type d -prune -exec rm -rf {} +
+  install -Dm644 "$startdir/revisions-qt.desktop" "$pkgdir/usr/share/applications/revisions-qt.desktop"
+  install -Dm644 "$startdir/revisions.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/revisions-qt.svg"
+  install -dm755 "$pkgdir/usr/bin"
+  printf '#!/bin/sh\ncd /opt/study-platform\nexec python -m apps.desktop.main "$@"\n' > "$pkgdir/usr/bin/revisions-qt"
+  chmod 755 "$pkgdir/usr/bin/revisions-qt"
+}

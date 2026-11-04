@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Révisions
+Comment=Fiches, entraînement et sources de première
+Exec=revisions-qt
+Icon=revisions-qt
+Type=Application
+Categories=Education;
+Terminal=false

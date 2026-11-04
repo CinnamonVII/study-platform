@@ -1,0 +1,15 @@
+{
+  "notion_sources": [],
+  "notion_destinations": {},
+  "excluded_pages": [],
+  "github_repository": "",
+  "allowed_origins": [
+    "https://cinnamonvii.github.io"
+  ],
+  "attachment_hosts": [
+    "prod-files-secure.s3.us-west-2.amazonaws.com",
+    "s3.us-west-2.amazonaws.com"
+  ],
+  "max_document_bytes": 20000000,
+  "github_sources": []
+}
