@@ -45,6 +45,8 @@ Le workflow produit l’URL effective dans son environnement `github-pages`. Il 
 
 **Planification actuelle :** seuls les fetchs Git et les contrôles d'accès Notion sans stockage sont automatisés sur runners GitHub hébergés. Voir [STATELESS_AUTOMATION.md](STATELESS_AUTOMATION.md). Le pipeline ci-dessous reste une option **manuelle**, non activée automatiquement.
 
+Une alternative sans machine personnelle permanente est préparée dans [FULL_CLOUD_PIPELINE.md](FULL_CLOUD_PIPELINE.md) : runner jetable, état durable dans un dépôt privé, checkpoints avant publication. Cette alternative exige la confirmation du stockage privé et une configuration API réelle avant activation.
+
 Installer un runner GitHub Actions **privé, persistant**, étiqueté `study-private`, sur le même hôte que l’API. Il doit accéder au même `STUDY_STATE`, à Rust, Typst, aux polices et au réseau des API. Restreindre le runner au dépôt dédié et aux branches approuvées ; les tests de pull requests utilisent les runners hébergés et ne doivent pas exécuter de code non approuvé sur cet hôte.
 
 Créer l’environnement GitHub `study-private` avec ces secrets :

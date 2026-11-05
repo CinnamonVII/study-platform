@@ -12,6 +12,8 @@ jobs:
           node-version: '24'
       - run: bash -n scripts/fetch-status.sh
       - run: node --test scripts/notion-check.test.cjs
+      - run: bash -n scripts/checkpoint-private-state.sh
+      - run: python3 scripts/test-private-checkpoint.py
   contracts-and-pipeline:
     runs-on: ubuntu-latest
     steps:

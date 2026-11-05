@@ -71,7 +71,9 @@ Voir [VALIDATION.md](docs/VALIDATION.md) pour les preuves réellement obtenues e
 
 [DEPLOYMENT.md](docs/DEPLOYMENT.md) décrit l’installation native, AppImage, le backend privé et GitHub Pages. [STATELESS_AUTOMATION.md](docs/STATELESS_AUTOMATION.md) décrit les tâches hébergées par GitHub : récupération horaire des références Git et contrôle quotidien de l’accès aux pages Notion explicitement autorisées. Elles ne nécessitent aucun stockage persistant ni machine personnelle allumée. Le pipeline privé `daily-sync.yml`, qui nécessite un état durable, reste manuel et sans planification.
 
-Aucune tâche ChatGPT n’est créée par ces workflows. Le contrôle Notion nécessite le secret et la variable documentés ; il ne synchronise ni ne génère de contenu.
+Aucune tâche ChatGPT n’est créée par ces workflows. Le contrôle Notion nécessite les secrets documentés ; il ne synchronise ni ne génère de contenu.
+
+[FULL_CLOUD_PIPELINE.md](docs/FULL_CLOUD_PIPELINE.md) présente le déploiement préparé pour la routine complète sur runners jetables avec un dépôt de données privé durable. Ce modèle reste à activer après confirmation du stockage, des sources, du compte API et des capacités de publication Notion. Il ne remplace pas le contrôle visuel obligatoire d'un export PDF natif Notion.
 
 ## Organisation
 

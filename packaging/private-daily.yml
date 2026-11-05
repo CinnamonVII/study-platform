@@ -1,0 +1,76 @@
+# Install only in .github/workflows/daily.yml of the PRIVATE data repository.
+name: Private daily study pipeline
+on:
+  schedule:
+    - cron: '0 7 * * *'
+      timezone: Europe/Paris
+    - cron: '30 7 * * *'
+      timezone: Europe/Paris
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: private-study-state
+  cancel-in-progress: false
+jobs:
+  daily:
+    if: github.event.repository.private && vars.ENABLE_STUDY_PIPELINE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      STUDY_STATE: state
+      STUDY_PRIVATE_REPOSITORY: 'true'
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - name: Require private configuration
+        env:
+          CODE_REF: ${{ vars.STUDY_CODE_REF }}
+        run: |
+          test -n "$NOTION_TOKEN"
+          test -n "$OPENAI_API_KEY"
+          test -n "$OPENAI_MODEL"
+          [[ "$CODE_REF" =~ ^[0-9a-f]{40}$ ]]
+      - uses: actions/checkout@v4
+        with:
+          path: data
+          ref: main
+      - uses: actions/checkout@v4
+        with:
+          repository: CinnamonVII/study-platform
+          ref: ${{ vars.STUDY_CODE_REF }}
+          path: code
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Restore durable state
+        working-directory: data
+        run: |
+          test -f config.json
+          mkdir -p state
+          if test -f state/checkpoint.sqlite; then
+            cp state/checkpoint.sqlite state/study.sqlite
+          fi
+          git config user.name 'study-platform automation'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Build Rust engine and PDF renderer
+        run: |
+          cargo build --locked --release --manifest-path code/Cargo.toml -p study-engine
+          cargo install --locked --version 0.15.1 typst-cli
+      - name: Import changes, generate pending materials and publish accepted materials
+        working-directory: data
+        env:
+          STUDY_CHECKPOINT_BIN: ${{ github.workspace }}/code/scripts/checkpoint-private-state.sh
+        run: |
+          chmod +x "$STUDY_CHECKPOINT_BIN"
+          ../code/target/release/study-engine daily config.json
+      - name: Save state even after a processing failure
+        if: always() && hashFiles('data/config.json') != ''
+        working-directory: data
+        run: bash ../code/scripts/checkpoint-private-state.sh
+      - name: Report
+        if: always()
+        run: |
+          echo 'Private pipeline: see this private run and state checkpoint. New outputs remain pending review. Typst PDFs are not validated native Notion exports.' >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,5 @@
+# Ignore the live database and transient locks; checkpoint.sqlite is durable.
+state/study.sqlite
+state/study.sqlite-*
+state/checkpoint.tmp
+state/sync.lock

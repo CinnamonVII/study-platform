@@ -224,10 +224,34 @@ impl Store {
         Ok(())
     }
     pub fn publication(&self, key: &str, status: &str, detail: &str) -> Result<()> {
+        let checkpoint = std::env::var_os("STUDY_CHECKPOINT_BIN");
+        self.record_publication(key, status, detail, checkpoint.as_deref())
+    }
+    fn record_publication(
+        &self,
+        key: &str,
+        status: &str,
+        detail: &str,
+        checkpoint: Option<&std::ffi::OsStr>,
+    ) -> Result<()> {
         self.db()?.execute(
             "INSERT OR REPLACE INTO publications VALUES(?,?,?)",
             params![key, status, detail],
         )?;
+        Self::run_checkpoint(checkpoint)
+    }
+    pub fn checkpoint_remote(&self) -> Result<()> {
+        let checkpoint = std::env::var_os("STUDY_CHECKPOINT_BIN");
+        Self::run_checkpoint(checkpoint.as_deref())
+    }
+    fn run_checkpoint(checkpoint: Option<&std::ffi::OsStr>) -> Result<()> {
+        // Administrator configuration, never read from source documents.
+        if let Some(program) = checkpoint {
+            let result = std::process::Command::new(program).status()?;
+            if !result.success() {
+                bail!("Échec du checkpoint distant ; traitement interrompu")
+            }
+        }
         Ok(())
     }
     pub fn publication_status(&self, key: &str) -> Result<Option<(String, String)>> {
@@ -240,6 +264,48 @@ impl Store {
                 |r| Ok((r.get(0)?, r.get(1)?)),
             )
             .optional()?)
+    }
+}
+#[cfg(test)]
+mod checkpoint_tests {
+    use super::*;
+
+    #[test]
+    fn failed_remote_checkpoint_stops_publication_and_keeps_attempt() {
+        let directory = tempfile::tempdir().unwrap();
+        let store = Store::open(directory.path()).unwrap();
+        assert!(
+            store
+                .record_publication(
+                    "test",
+                    "attempting",
+                    "destination",
+                    Some("/bin/false".as_ref())
+                )
+                .is_err()
+        );
+        assert_eq!(
+            store.publication_status("test").unwrap(),
+            Some(("attempting".into(), "destination".into()))
+        );
+    }
+
+    #[test]
+    fn successful_remote_checkpoint_allows_publication() {
+        let directory = tempfile::tempdir().unwrap();
+        let store = Store::open(directory.path()).unwrap();
+        store
+            .record_publication(
+                "test",
+                "attempting",
+                "destination",
+                Some("/bin/true".as_ref()),
+            )
+            .unwrap();
+        assert_eq!(
+            store.publication_status("test").unwrap().unwrap().0,
+            "attempting"
+        );
     }
 }
 impl Store {

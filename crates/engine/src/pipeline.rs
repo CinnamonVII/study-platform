@@ -253,6 +253,9 @@ async fn process(store: &Store, g: &dyn Generator, docs: Vec<Document>) -> Resul
             params![d.id, d.dependency_hash()],
         )?;
         tx.commit()?;
+        // Save each completed document before starting another paid model request.
+        // A terminated disposable runner can then resume without losing earlier work.
+        store.checkpoint_remote()?;
         count += 1;
     }
     Ok(count)
