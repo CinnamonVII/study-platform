@@ -1,0 +1,29 @@
+name: Daily Notion access check
+on:
+  schedule:
+    - cron: '0 7 * * *'
+      timezone: Europe/Paris
+    - cron: '30 7 * * *'
+      timezone: Europe/Paris
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: notion-access-check
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Read explicitly allowed page metadata
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_CHECK_PAGE_IDS: ${{ secrets.NOTION_CHECK_PAGE_IDS }}
+        run: node scripts/notion-check.cjs

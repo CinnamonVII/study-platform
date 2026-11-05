@@ -69,9 +69,9 @@ Voir [VALIDATION.md](docs/VALIDATION.md) pour les preuves réellement obtenues e
 
 ## Installer et automatiser
 
-[DEPLOYMENT.md](docs/DEPLOYMENT.md) décrit l’installation native, AppImage, le backend privé et GitHub Pages. [CHATGPT_SCHEDULED_TASK.md](docs/CHATGPT_SCHEDULED_TASK.md) contient les instructions pour la tâche de 7 h. Le workflow quotidien utilise un runner privé persistant sur le même hôte que le backend, donc le même verrou et les mêmes checkpoints. Il fonctionne indépendamment de ChatGPT.
+[DEPLOYMENT.md](docs/DEPLOYMENT.md) décrit l’installation native, AppImage, le backend privé et GitHub Pages. [STATELESS_AUTOMATION.md](docs/STATELESS_AUTOMATION.md) décrit les tâches hébergées par GitHub : récupération horaire des références Git et contrôle quotidien de l’accès aux pages Notion explicitement autorisées. Elles ne nécessitent aucun stockage persistant ni machine personnelle allumée. Le pipeline privé `daily-sync.yml`, qui nécessite un état durable, reste manuel et sans planification.
 
-Aucune tâche ChatGPT, connexion API persistante ou URL publique déployée n’est créée par la présence de ces fichiers. Les accès et déploiements restent à configurer.
+Aucune tâche ChatGPT n’est créée par ces workflows. Le contrôle Notion nécessite le secret et la variable documentés ; il ne synchronise ni ne génère de contenu.
 
 ## Organisation
 

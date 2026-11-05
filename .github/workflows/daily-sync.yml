@@ -1,10 +1,6 @@
 name: Daily private revision sync
 on:
-  schedule:
-    - cron: '0 7 * * *'
-      timezone: 'Europe/Paris'
-    - cron: '30 7 * * *'
-      timezone: 'Europe/Paris'
+  # Manual only: this pipeline requires durable private state.
   workflow_dispatch:
 concurrency:
   group: study-private-sync

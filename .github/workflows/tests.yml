@@ -3,6 +3,15 @@ on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
 jobs:
+  automation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: bash -n scripts/fetch-status.sh
+      - run: node --test scripts/notion-check.test.cjs
   contracts-and-pipeline:
     runs-on: ubuntu-latest
     steps:

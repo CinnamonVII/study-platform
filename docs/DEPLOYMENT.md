@@ -43,6 +43,8 @@ Le workflow produit l’URL effective dans son environnement `github-pages`. Il 
 
 ## Routine quotidienne indépendante de ChatGPT
 
+**Planification actuelle :** seuls les fetchs Git et les contrôles d'accès Notion sans stockage sont automatisés sur runners GitHub hébergés. Voir [STATELESS_AUTOMATION.md](STATELESS_AUTOMATION.md). Le pipeline ci-dessous reste une option **manuelle**, non activée automatiquement.
+
 Installer un runner GitHub Actions **privé, persistant**, étiqueté `study-private`, sur le même hôte que l’API. Il doit accéder au même `STUDY_STATE`, à Rust, Typst, aux polices et au réseau des API. Restreindre le runner au dépôt dédié et aux branches approuvées ; les tests de pull requests utilisent les runners hébergés et ne doivent pas exécuter de code non approuvé sur cet hôte.
 
 Créer l’environnement GitHub `study-private` avec ces secrets :
@@ -54,7 +56,7 @@ Créer l’environnement GitHub `study-private` avec ces secrets :
 | `STUDY_CONTENT_TOKEN` | Token GitHub limité au dépôt de contenu privé : Contents et Pull requests en écriture |
 | `STUDY_CONFIG_JSON` | Contenu JSON de la configuration privée des pages |
 
-Variables : `STUDY_STATE` (chemin absolu commun, préexistant) et `OPENAI_MODEL` (modèle compatible avec Responses, images/PDF et JSON Schema, choisi dans le compte API). Le workflow utilise `cron: '0 7 * * *'` et `timezone: 'Europe/Paris'`, plus une reprise à 7 h 30 et `workflow_dispatch`. Le second passage ne régénère pas les documents déjà traités. Les validations humaines permettent une publication ultérieure même sans nouvelles sources.
+Variables : `STUDY_STATE` (chemin absolu commun, préexistant) et `OPENAI_MODEL` (modèle compatible avec Responses, images/PDF et JSON Schema, choisi dans le compte API). Le workflow expose uniquement `workflow_dispatch`, sans cron. Les validations humaines permettent une publication ultérieure même sans nouvelles sources.
 
 La tâche ChatGPT utilise les connexions qu’elle possède réellement ; pour lancer un traitement, elle doit déclencher ce même workflow si l’app GitHub le permet. Elle ne doit pas lancer un deuxième moteur avec un autre état. Le verrou local couvre les appels API et le workflow. Les retards de planification de la plateforme restent possibles.
 
